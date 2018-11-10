@@ -10,9 +10,6 @@ result <- as.data.frame(result)
 #Remove all data points with prices that are 0.0
 result <- result[result$minimum_price > 0,]
 
-#Remove outliers
-result <- result[result$minimum_price < 0.2,]
-
 #Add additional variable for difference between no competition vs competition
 result$deregulated <- result$number_companies > 1
 result$deregulated <- as.numeric(result$deregulated)
@@ -42,6 +39,5 @@ normalize_for_states <- lm(result$average_price ~ result$number_companies +
                              result$state)
 summary(normalize_for_states)
 
-#Linear Regression Again
-relationship_wo_outliers <- lm(result$average_price ~ result$number_companies)
-summary(relationship_wo_outliers)
+#Average Cost per State
+average_price_per_state <- aggregate(result$average_price, by = list(result$state), FUN = mean)
